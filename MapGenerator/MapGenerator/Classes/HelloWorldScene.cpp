@@ -1,10 +1,7 @@
 #include "HelloWorldScene.h"
-#include "cocostudio/CocoStudio.h"
-#include "ui/CocosGUI.h"
+#include "MapObject.h"
 
 USING_NS_CC;
-
-using namespace cocostudio::timeline;
 
 Scene* HelloWorld::createScene()
 {
@@ -30,10 +27,24 @@ bool HelloWorld::init()
     {
         return false;
     }
+
+    auto size = Director::getInstance()->getVisibleSize();
     
-    auto rootNode = CSLoader::createNode("MainScene.csb");
-
-    addChild(rootNode);
-
+    _mapObj = MapObject::create();
+    _mapObj->setPosition(size.width * 0.5f, size.height * 0.5f);
+    addChild(_mapObj);
+    
+    _mapObj->generatorMap();
+    
     return true;
+}
+
+
+void HelloWorld::menuCloseCallback(Ref* pSender)
+{
+    Director::getInstance()->end();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    exit(0);
+#endif
 }
